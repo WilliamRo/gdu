@@ -8,9 +8,10 @@ for _ in range(DIR_DEPTH + 1):
   sys.path.insert(0, ROOT)
 from tframe import console
 from tframe.models.sl.classifier import Classifier
-from tframe.trainers.smartrainer import SmartTrainerHub as Config
-from tframe.data.sequences.seq_set import SequenceSet
-import merg_du as du
+from tframe.enums import SaveMode
+from tframe.trainers import SmartTrainerHub as Config
+
+import pm_du as du
 
 
 from_root = lambda path: os.path.join(ROOT, path)
@@ -19,54 +20,83 @@ from_root = lambda path: os.path.join(ROOT, path)
 # Initialize config and set data/job dir
 # -----------------------------------------------------------------------------
 th = Config(as_global=True)
-th.data_dir = from_root('03-mERG/data')
-th.job_dir = from_root('03-mERG')
+th.data_dir = from_root('04-pMNIST/data')
+th.job_dir = from_root('04-pMNIST')
+
 # -----------------------------------------------------------------------------
 # Some device configurations
 # -----------------------------------------------------------------------------
 th.allow_growth = False
-th.gpu_memory_fraction = 0.30
+th.gpu_memory_fraction = 0.3
 # -----------------------------------------------------------------------------
 # Set information about the data set
 # -----------------------------------------------------------------------------
-th.input_shape = [7]
-th.output_dim = 7
-th.multiple = 7
-th.train_size = 1000
-th.test_size = 256
+th.input_shape = [1]
+th.output_dim = 10
+th.permute = True
 
 # -----------------------------------------------------------------------------
 # Set common trainer configs
 # -----------------------------------------------------------------------------
-th.epoch = 300
-th.validation_per_round = 20
+th.epoch = 100
+th.batch_size = 100
+th.validation_per_round = 10
+th.export_tensors_upon_validation = True
+
+th.early_stop = True
+th.patience = 6
+
 th.num_steps = -1
-th.probe_per_round = 50
 th.val_batch_size = -1
 th.shuffle = True
 th.print_cycle = 1
 th.gather_note = True
-th.sample_num = 2
+th.sample_num = 1
 
-th.save_model = False
-th.overwrite = True
+th.save_model = True
+th.save_mode = SaveMode.ON_RECORD
+th.overwrite = False
+th.export_note = False
+th.summary = False
 th.show_structure_detail = True
+th.keep_trainer_log = True
+
+th.clip_threshold = 1.0
+th.clip_method = 'value'
+
+th.output_dropout = 0
+th.rec_dropout = 0
+
+th.val_batch_size = 5000
+th.eval_batch_size = 5000
+th.evaluate_train_set = True
+th.evaluate_val_set = True
+th.evaluate_test_set = True
+
+th.val_decimals = 4
+th.print_cycle = 10
+
+# -----------------------------------------------------------------------------
+# Set some default model configs
+# -----------------------------------------------------------------------------
 
 def activate():
-
   assert callable(th.model)
   model = th.model(th)
   assert isinstance(model, Classifier)
 
   # Load data
-  train_set, test_set = du.load_data(
-    th.data_dir, train_size=th.train_size, test_size=th.test_size,
-    multiple=th.multiple)
-  assert isinstance(train_set, SequenceSet)
+  train_set, val_set, test_set = du.load_data(
+    th.data_dir, permute=th.permute, permute_mark='alpha')
 
   # Train or evaluate
-  model.train(train_set, validation_set=test_set, trainer_hub=th,
-              probe=lambda t, **kwargs: du.ERG.probe(test_set, t, **kwargs))
+  if th.train:
+    model.train(train_set, validation_set=val_set, trainer_hub=th,
+                test_set=test_set)
+  else:
+    model.evaluate_model(train_set, batch_size=5000)
+    model.evaluate_model(val_set, batch_size=5000)
+    model.evaluate_model(test_set, batch_size=5000)
 
   # End
   model.shutdown()
