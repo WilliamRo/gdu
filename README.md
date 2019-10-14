@@ -1,7 +1,8 @@
 Grouped Distributor Units (GDU)
 =========
-Experiments in paper *Learning Longer-term Dependencies via Grouped Distributor Unit*.
+Experiments in paper *[Learning Longer-term Dependencies via Grouped Distributor Unit]( https://arxiv.org/abs/1906.08856 )*.
 All experiments are done using [tframe](https://github.com/WilliamRo/tframe), which contains a number of neural network APIs based on ```tensorflow```.
+
 <div style="text-align: left">
   <img src="https://github.com/WilliamRo/gdu/blob/master/figures/gdu.png?raw=true" width="600"/>
 </div>
@@ -44,6 +45,6 @@ Specifying hyper-parameters via command line arguments is also supported.  In th
 william@alienware:~/gdu/04-pMNIST$ python t4_gdu.py --batch_size=200 --lr=0.002
 ```
 
-**Where can I find the implementation of the recurrent models?**
+**Where can I find the implementations of the recurrent models?**
 
 Check this directory `tframe/nets/rnn_cells`.
