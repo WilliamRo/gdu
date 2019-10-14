@@ -49,7 +49,6 @@ th.batch_size = 20
 th.learning_rate = 0.01
 
 th.validate_cycle = 20
-th.probe_cycle = 20
 
 th.num_steps = -1
 th.val_batch_size = -1
