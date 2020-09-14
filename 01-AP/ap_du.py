@@ -1,5 +1,5 @@
 from tframe.data.perpetual_machine import PerpetualMachine
-from tframe.data.sequences.ap import AP
+from tframe.data.sequences.benchmarks.ap import AP
 from tframe.data.sequences.seq_set import SequenceSet
 
 

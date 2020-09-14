@@ -1,5 +1,5 @@
 from tframe.data.sequences.seq_set import SequenceSet
-from tframe.data.sequences.pmnist import pMNIST
+from tframe.data.sequences.benchmarks.pmnist import pMNIST
 
 
 def load_data(data_dir, permute, permute_mark='alpha', test_directly=False):

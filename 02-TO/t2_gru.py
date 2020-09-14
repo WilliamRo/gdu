@@ -34,7 +34,7 @@ def main(_):
   summ_name = model_name
   th.prefix = '{}_'.format(date_string())
   th.suffix = ''
-  th.visible_gpu_id = 1
+  th.visible_gpu_id = 0
 
   # ---------------------------------------------------------------------------
   # 2. model setup
@@ -63,4 +63,5 @@ def main(_):
 
 
 if __name__ == '__main__':
+  console.suppress_logging()
   tf.app.run()

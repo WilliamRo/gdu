@@ -1,5 +1,5 @@
 from tframe.data.dataset import DataSet
-from tframe.data.sequences.reber import ERG
+from tframe.data.sequences.benchmarks.reber import ERG
 
 
 def load_data(path, train_size, test_size, multiple, rule='lstm97'):

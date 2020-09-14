@@ -1,5 +1,5 @@
 from tframe.data.perpetual_machine import PerpetualMachine
-from tframe.data.sequences.to import TO
+from tframe.data.sequences.benchmarks.to import TO
 from tframe.data.sequences.seq_set import SequenceSet
 
 
